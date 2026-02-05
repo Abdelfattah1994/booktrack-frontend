@@ -1,5 +1,52 @@
-# Vue 3 + TypeScript + Vite
+# 📚 BookTrack - Frontend
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+**BookTrack** est une application web de gestion de bibliothèque personnelle développée avec **Vue.js 3** et **TypeScript**. Elle offre une interface fluide et réactive pour explorer une collection de livres, gérer ses favoris et consulter des informations détaillées.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+---
+
+## Aperçu de l'Interface
+
+### Authentification
+Le tunnel d'entrée propose une expérience utilisateur cohérente avec des formulaires de connexion et d'inscription sécurisés.
+
+### Login Page          
+
+![Login](screenshots/Capture3.PNG)
+
+### Register Page       
+
+![Register](screenshots/Capture4.PNG)
+
+### Accueil & Recherche
+
+L'interface principale permet une recherche dynamique et une navigation par pagination.
+
+![Home Page](screenshots/Capture.PNG)
+
+### Détails & Favoris
+
+![Book Details](screenshots/Capture2.PNG)
+
+---
+
+## Stack Technique
+
+* **Framework** : Vue.js 3 (Composition API)
+* **Langage** : TypeScript 
+* **State Management** : Pinia (Stores pour Auth, Books et Favorites)
+* **Routing** : Vue Router
+* **Tooling** : Vite 
+* **Icons** : Iconify
+
+---
+
+## Architecture du Projet
+
+```text
+src/
+├── api/          # Configuration Axios et intercepteurs
+├── components/   # Composants réutilisables (BookCard, etc.)
+├── router/       # Configuration des routes dynamiques
+├── stores/       # Gestion d'état global avec Pinia
+├── types/        # Interfaces et DTO TypeScript
+└── views/        # Pages principales (Home, Details, Auth)
