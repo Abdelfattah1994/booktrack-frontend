@@ -10,14 +10,25 @@ export interface LoginRequest {
 
 export interface RegisterRequest {
     username: string;
-    password: string;
     email: string;
+    password: string;
 }
 
-export interface Book {
+export interface BookResponse {
     id: number;
     title: string;
     author: string;
-    description: string;
-    popularity: number;
+    summary: string;
+    rating: number;
+    isbn: string;
+}
+
+export interface PageBookResponse {
+    content: BookResponse[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    last: boolean;
+    first: boolean;
 }
