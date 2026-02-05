@@ -4,28 +4,37 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
 
 const username = ref('')
+const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const error = ref('')
 const isLoading = ref(false)
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   error.value = ''
+
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Passwords do not match.'
+    return
+  }
+
   isLoading.value = true
 
   try {
-    const success = await authStore.login({
+    const success = await authStore.register({
       username: username.value,
+      email: email.value,
       password: password.value
     })
 
     if (success) {
-      router.push('/books')
+      router.push('/')
     }
   } catch (err: any) {
-    error.value = 'Invalid username or password. Please try again.'
+    error.value = err.response?.data?.message || 'Registration failed. Please try again.'
   } finally {
     isLoading.value = false
   }
@@ -33,51 +42,72 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="login-page">
-    <div class="login-card">
-      <div class="login-header">
-        <div class="logo">📚</div>
-        <h1>BookTrack</h1>
-        <p>Welcome back! Please login to your account.</p>
-      </div>
-
-      <form @submit.prevent="handleLogin" class="login-form">
-        <div class="input-group">
-          <label for="username">Username</label>
-          <input
-              id="username"
-              v-model="username"
-              type="text"
-              placeholder="Enter your username"
-              required
-          />
-        </div>
-
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input
-              id="password"
-              v-model="password"
-              type="password"
-              placeholder="••••••••"
-              required
-          />
-        </div>
-
-        <div v-if="error" class="error-message">
-          {{ error }}
-        </div>
-
-        <button type="submit" :disabled="isLoading" class="login-button">
-          <span v-if="isLoading" class="loader"></span>
-          <span v-else>Sign In</span>
-        </button>
-      </form>
-
-      <div class="login-footer">
-        <p>Don't have an account? <router-link to="/register">Register here</router-link></p>
-      </div>
+  <div class="login-page"> <div class="login-card">
+    <div class="login-header">
+      <div class="logo">📚</div>
+      <h1>BookTrack</h1>
+      <p>Create your account to start your collection.</p>
     </div>
+
+    <form @submit.prevent="handleRegister" class="login-form">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input
+            id="username"
+            v-model="username"
+            type="text"
+            placeholder="Choose a username"
+            required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input
+            id="email"
+            v-model="email"
+            type="email"
+            placeholder="Enter your email"
+            required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input
+            id="password"
+            v-model="password"
+            type="password"
+            placeholder="••••••••"
+            required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+            id="confirmPassword"
+            v-model="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            required
+        />
+      </div>
+
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <button type="submit" :disabled="isLoading" class="login-button">
+        <span v-if="isLoading" class="loader"></span>
+        <span v-else>Create Account</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Already have an account? <router-link to="/">Login here</router-link></p>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -124,7 +154,7 @@ p {
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .input-group {
@@ -162,6 +192,7 @@ input:focus {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-top: 0.5rem;
 }
 
 .login-button:hover:not(:disabled) {

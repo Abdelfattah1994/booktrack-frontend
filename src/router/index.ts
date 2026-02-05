@@ -20,6 +20,11 @@ const router = createRouter({
             name: 'book-details',
             component: () => import('@/views/BookDetailView.vue'),
             props: true
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: () => import('@/views/RegisterView.vue')
         }
     ]
 })
