@@ -3,12 +3,15 @@ import { onMounted, ref, watch } from 'vue';
 import { useBookStore } from '@/stores/book.store.ts';
 import BookCard from '@/components/BookCard.vue';
 import { Icon } from '@iconify/vue';
+import { useAuthStore } from '@/stores/auth.store';
+import router from "@/router";
 
 const bookStore = useBookStore();
 const searchQuery = ref('');
 const currentPage = ref(0);
 const pageSize = 4;
 const scrollContainer = ref<HTMLElement | null>(null);
+const authStore = useAuthStore();
 
 onMounted(async () => {
   // Load Top 10 and initial search results in parallel
@@ -58,10 +61,33 @@ const scroll = (direction: 'left' | 'right') => {
     });
   }
 };
+
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/');
+};
 </script>
 
 <template>
   <div class="home-wrapper">
+    <nav class="top-nav">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <Icon icon="lucide:book-open" class="nav-logo" />
+          <span>BookTrack</span>
+        </div>
+        <div class="nav-actions">
+          <div class="user-pill" v-if="authStore.username">
+            <Icon icon="lucide:user" class="user-icon" />
+            <span>{{ authStore.username }}</span>
+          </div>
+          <button @click="handleLogout" class="logout-btn" title="Logout">
+            <Icon icon="lucide:log-out" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </nav>
     <header class="hero-section">
       <div class="hero-content">
         <h1>Discover Your Next Adventure</h1>
@@ -283,6 +309,74 @@ const scroll = (direction: 'left' | 'right') => {
 
 .nav-btn.right {
   right: 0;
+}
+.top-nav {
+  background: white;
+  padding: 0.75rem 2rem;
+  border-bottom: 1px solid #edf2f7;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.nav-logo {
+  color: #3498db;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #f1f5f9;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #e74c3c;
+  color: white;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
 }
 
 /* States & Pagination */
