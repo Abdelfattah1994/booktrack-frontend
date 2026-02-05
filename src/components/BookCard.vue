@@ -2,17 +2,23 @@
 import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import type { BookResponse } from '@/types/dto';
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   book: BookResponse;
   isTop10?: boolean;
 }>();
 
+const router = useRouter();
 const imageError = ref(false);
 const coverUrl = `https://covers.openlibrary.org/b/isbn/${props.book.isbn}-M.jpg?default=false`;
 
 const handleImageError = () => {
   imageError.value = true;
+};
+
+const goToDetails = () => {
+  router.push({ name: 'book-details', params: { id: props.book.id } });
 };
 </script>
 
@@ -43,7 +49,7 @@ const handleImageError = () => {
     </div>
 
     <div class="card-actions">
-      <button class="details-btn">
+      <button class="details-btn" @click="goToDetails">
         View Details
       </button>
     </div>
